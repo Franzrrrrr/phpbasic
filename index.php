@@ -13,8 +13,6 @@
         <input type="password" name="password"><br>
         <label>pesanan</label><br>
         <input type="text" name="pesanan"><br>
-        <label>jumlah</label><br>
-        <input type="text" name="jumlah">
         <input type="submit" value="Log in"><br>
 
     </form>
@@ -26,10 +24,15 @@
     $name = $_POST['username'];    
     $password = $_POST['password'];    
     $pesanan = $_POST['pesanan'];    
-    $name = $_POST['username'];    
+    $name = $_POST['username'];
+    $harga = 12000 ;
+    $total = $pesanan * $harga ;      
 
-    $profil = $name . "<br>". $password;
+    $profil = 'password     : ' . $password . "<br>". $name ; 
 
-    echo "$profil"
+
+
+    echo "$profil telah memesan makanan sebanyak $pesanan <br>
+    total harga : Rp$total,00"
 
 ?>
