@@ -1,6 +1,9 @@
 <?php
 include('header.html');
 include('database.php');
+
+$sql = mysqli_query($conn, "SELECT * FROM users");
+$nomor = 1;
 ?>
 
 <!DOCTYPE html>
@@ -11,9 +14,9 @@ include('database.php');
   <title>Document</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="p-6">
+<body class="p-6 place justify-items-center">
 
-<form class="mt-8" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="POST">
+<form class="mt-8 p-6 bg-gray-200 rounded-md justify-items-center" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="POST">
   username: <br>
   <input type="text" name="nama" placeholder="nama" class="border-2 border-gray-200 ring-2 ring-gray-100 rounded-md p-2 placeholder:p-2 mt-1">
   <br>
@@ -26,20 +29,43 @@ include('database.php');
   password: <br>
   <input type="password" name="password" placeholder="password" class="border-2 border-gray-200 ring-2 ring-gray-100 rounded-md p-2 placeholder:p-2 mt-1">
   <br>
-  <input type="submit" class="p-2 rounded-sm bg-gray-200 mt-2" name="submit" value="Submit">
+  <input type="submit" class="p-2 rounded-md bg-blue-300 mt-4   " name="submit" value="Submit">
 </form>
+
+<table class="table-auto border-collapse border border-gray-400 w-full mt-4">
+    <thead class="bg-gray-200">
+      <tr>
+        <th class="border border-gray-400 px-4 py-2">No</th>
+        <th class="border border-gray-400 px-4 py-2">Nama</th>
+        <th class="border border-gray-400 px-4 py-2">Email</th>
+        <th class="border border-gray-400 px-4 py-2">Age</th>
+      </tr>
+    </thead>
+    <tbody>
+      <?php while($data = mysqli_fetch_assoc($sql)) { ?>
+      <tr>
+        <td class="border border-gray-400 px-4 py-2"><?php echo $nomor++; ?></td>
+        <td class="border border-gray-400 px-4 py-2"><?php echo $data['nama']; ?></td>
+        <td class="border border-gray-400 px-4 py-2"><?php echo $data['email']; ?></td>
+        <td class="border border-gray-400 px-4 py-2"><?php echo $data['age']; ?></td>
+      </tr>
+      <?php } ?>
+    </tbody>
+  </table>
 
 </body>
 </html>
 
 <?php
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+
     $nama     = filter_input(INPUT_POST, "nama", FILTER_SANITIZE_SPECIAL_CHARS);
     $email    = filter_input(INPUT_POST, "email", FILTER_SANITIZE_EMAIL);
     $age      = filter_input(INPUT_POST, "age", FILTER_SANITIZE_NUMBER_INT);
     $password = filter_input(INPUT_POST, "password", FILTER_SANITIZE_SPECIAL_CHARS);
 
-    if (empty($nama) || empty($email) || empty($age) || empty($password)) {
+    if (empty($nama) ||  empty($email) || empty($age) || empty($password)) {
         echo "Please fill in all fields";
     } else {
         $hash = password_hash($password, PASSWORD_DEFAULT);
